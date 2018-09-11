@@ -1,0 +1,10 @@
+platform :ios, '8.0'
+target 'MVVM_Demo' do
+
+pod 'AFNetworking'
+pod 'MJRefresh'
+
+pod 'YYKit'
+pod 'BalopyKit'
+pod 'Masonry'
+end

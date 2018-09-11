@@ -1,0 +1,42 @@
+//
+//  MVVM_Demo.pch
+//  MVVM_Demo
+//
+//  Created by Balopy on 2018/3/31.
+//  Copyright © 2018年 Balopy. All rights reserved.
+//
+
+#ifndef MVVM_Demo_pch
+#define MVVM_Demo_pch
+
+#import "MNetRequestHeader.h"
+#import "BLListItem.h"
+#import <UIButton+Balopy.h>
+
+
+
+#define PrivateKey @"YaIHNMXmx19560uE124SImc6Yyv85j943S7885M41Bs20v02L1oYY4b94QL3j72x9YfE37814h7092fGf9f054S6J83G1o3bT48I4p0s5KbS3Bd09A3q0C61vaL2audzr89Av258D5H32wr754d7Gzd0xe0D79zGd70703Iu642M5165VyyE3Lg4QF9524T956U4uR7HKZz0nYX236eC9von069nz7r7P"
+
+
+/** *屏幕高*/
+#define kScreen_height [[UIScreen mainScreen] bounds].size.height
+/** *屏幕宽*/
+#define kScreen_width [[UIScreen mainScreen] bounds].size.width
+
+#define BLDisptchMainQueue dispatch_get_main_queue()
+
+
+/** *三原色颜色*/
+#define ColorForRGB(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+
+#define MFONT(f) [UIFont systemFontOfSize:f]
+
+
+#if DEBUG
+#define BLLog(format, ...) printf("[%s] %s [第%d行] %s\n", __TIME__, __FUNCTION__, __LINE__, [[NSString stringWithFormat:format, ## __VA_ARGS__] UTF8String])
+#else
+#define BLLog(format, ...)
+#endif
+
+
+#endif /* MVVM_Demo_pch */
