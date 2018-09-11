@@ -202,6 +202,8 @@
 				9FCFD0E52142226C00266774 /* NSObject+BLPreload.m */,
 				9F44311020EDFEC7001F1A39 /* UIScrollView+MPreload.h */,
 				9F44311520EDFEC7001F1A39 /* UIScrollView+MPreload.m */,
+				9F1842D1214764200099EC6B /* BLShowViewIfNoData.h */,
+				9F1842D2214764200099EC6B /* BLShowViewIfNoData.m */,
 				9FCFD0E72142235900266774 /* BLRequestConfig.h */,
 				9FCFD0E82142235900266774 /* BLRequestConfig.m */,
 			);
@@ -211,8 +213,6 @@
 		9F44311F20EE0245001F1A39 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				9F1842D1214764200099EC6B /* BLShowViewIfNoData.h */,
-				9F1842D2214764200099EC6B /* BLShowViewIfNoData.m */,
 				9F44312020EE0259001F1A39 /* NSObject+MAdd.h */,
 				9F44312120EE0259001F1A39 /* NSObject+MAdd.m */,
 			);

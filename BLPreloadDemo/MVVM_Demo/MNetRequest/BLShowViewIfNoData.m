@@ -36,7 +36,7 @@
         _imageView = imageView;
         
         UIButton *reloadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        reloadBtn.blTitle = @"选购课程";
+        reloadBtn.blTitle = @"";
         reloadBtn.backgroundColor = [UIColor redColor];
         reloadBtn.blColor = [UIColor whiteColor];
         reloadBtn.blFont = [UIFont systemFontOfSize:14];

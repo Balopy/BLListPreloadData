@@ -92,9 +92,8 @@
         [self.showView removeFromSuperview];
     } else {
         
-        [self.showView showViewWithFirstTitle:YES secondTitle:YES btnTitle:@"是不是没有数据" imageName:@"占位图"];
-        [self.showView firstLabel:@"你好，你访问的数据" normalColor:[UIColor blueColor]];
-        [self.showView secondLabel:@"我是老二" normalColor:[UIColor orangeColor]];
+        [self.showView showViewWithFirstTitle:YES secondTitle:NO btnTitle:@"点击重试" imageName:@"占位图"];
+        [self.showView firstLabel:@"暂无数据" normalColor:[UIColor blueColor]];
     }
 }
 

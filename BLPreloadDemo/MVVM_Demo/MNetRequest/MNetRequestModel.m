@@ -121,8 +121,10 @@
 #pragma mark ---- 打印路径  ----
 + (void)printRequestUrlString:(NSString *)urlString withParamter:(NSDictionary *)dic {
     
-    if (!dic) return;
-    
+    if (!dic) {
+        BLLog(@"\n\n路径--%@", urlString);
+        return;
+    }
     __block NSString *tempStr = [urlString stringByAppendingString:@"?"];
     
     [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
@@ -130,9 +132,12 @@
         NSString *key_Value = [NSString stringWithFormat:@"%@=%@&", key, obj];
         tempStr = [tempStr stringByAppendingString:key_Value];
     }];
-   
-    tempStr = [tempStr substringToIndex:urlString.length-1];
-    NSLog(@"\n\n路径--%@", tempStr);
+    
+    if (dic.allKeys.count) {
+        
+        tempStr = [tempStr substringToIndex:tempStr.length-1];
+    }
+    BLLog(@"\n\n路径--%@", tempStr);
 }
 
 @end
