@@ -9,7 +9,6 @@
 #import "NSObject+BLPreload.h"
 #import "BLRequestConfig.h"
 
-
 @implementation NSObject (BLPreload)
 
 - (void)request:(BLRequestConfig *)config success:(void (^)(id))success failure:(void (^)(NSError *))failure {
@@ -18,11 +17,7 @@
     BOOL nomore = self.noRefreshData;
     if (nomore && !config.isRefreshing) {//没的更多数据
         
-        if (failure) {
-            NSError *error = nil;
-            failure(error);
-        }
-        //没有更多数据
+        if (failure)  failure(nil);
         return;
     }
     NSMutableDictionary *paramer = @{}.mutableCopy;
@@ -30,13 +25,14 @@
         [paramer addEntriesFromDictionary:config.requestDict];
     }
     
-    if (config.isRefreshing) {//如果刷新，置1
-        self.currentPage = 1;
-    }
-    if (config.keyOfPage) {
+    if (config.keyOfPage) {// 有分页才会走
+        
+        if (config.isRefreshing) {//如果刷新，置1
+            self.currentPage = 1;
+        }
         [paramer setValue:@(self.currentPage) forKey:config.keyOfPage];
+        self.currentPage++;//加1，回到第一页
     }
-    self.currentPage++;//加1，回到第一页
     
     //请求数据
     [MNetRequestModel request:config.url withParamters:paramer success:^(id responseData) {
@@ -47,7 +43,7 @@
             self.model_blArray = @[].mutableCopy;
         }
         
-        if (config.isRefreshing) {
+        if (config.isRefreshing) {//如果刷新，清空旧数据
             [self.model_blArray removeAllObjects];
         }
         
@@ -63,49 +59,49 @@
         
         if (config.modelClass && config.modelClass.length) {
             
-            dataArray = [NSArray modelArrayWithClass:NSClassFromString(config.modelClass) json:result];
+            id class = NSClassFromString(config.modelClass);
+            dataArray = [NSArray modelArrayWithClass:class json:result];
         } else {
             dataArray = result;
         }
         
-        
         if (!dataArray || dataArray.count == 0) {
             
             self.noRefreshData = YES;//如果为空，则无数据
-            
-            if (failure) {
-                NSError *error = nil;
-                failure(error);
+            if (config.isRefreshing) {
+                if (success) success(nil);
+            } else {
+                if (failure)  failure(nil);
             }
             return;
             
         } else {
-            self.noRefreshData = NO;//有数据，可以加载更多
+            
             [self.model_blArray addObjectsFromArray:dataArray];
+            
+            if (config.keyOfPage)
+                self.noRefreshData = NO;//有数据，可以加载更多
+            
+            else
+                self.noRefreshData = YES;//有数据，但没有加载更多
         }
         
         if (config.dealSecond) {
+            
             //如果进一步处理数据，把数据返回
-            if (success) {
-                success(dataArray);
-            }
+            if (success) success(dataArray);
         }else{
+            
             //如果不需要处理，直接返回累加数据
-            if (success) {
-                
-                NSArray *array = self.model_blArray;
-                success(array);
-            }
+            if (success)  success(self.model_blArray);
         }
         
     } failure:^(NSError *error) {
+        
         //请求失败，刷新再次请求当前页
-        if (self.currentPage > 1) {
-            self.currentPage --;
-        }
-        if (failure) {
-            failure(error);
-        }
+        if (self.currentPage > 1)  self.currentPage --;
+        
+        if (failure)  failure(error);
     }];
 }
 

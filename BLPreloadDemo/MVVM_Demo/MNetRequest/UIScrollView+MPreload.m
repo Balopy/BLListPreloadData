@@ -8,7 +8,6 @@
 
 #import "UIScrollView+MPreload.h"
 #import <objc/runtime.h>
-#import <MJRefresh/MJRefresh.h>
 #import "NSObject+BLPreload.h"
 #import "BLShowViewIfNoData.h"
 
@@ -36,6 +35,7 @@
         CGRect frame = self.frame;
         frame.origin = CGPointZero;
         showView = [BLShowViewIfNoData showView:frame];
+        showView.hidden = YES;
         showView.reloadDataBlock = ^(UIButton *paramer) {
             
             if (self.bl_preloadBlock) self.bl_preloadBlock(YES);
@@ -59,18 +59,22 @@
 - (void)headerReloadBlock:(BLRefreshBlock)bl_reloadBlock{
     
     MJRefreshNormalHeader *header = [MJRefreshNormalHeader headerWithRefreshingBlock:bl_reloadBlock];
-    [header beginRefreshing];
     self.mj_header = header;
     
+    [self startRefreshing];
 }
 
+- (void)startRefreshing {
+    [self.mj_header beginRefreshing];
+    
+}
 - (void)footerReloadBlock:(BLRefreshBlock)bl_reloadBlock {
     
     MJRefreshBackNormalFooter *footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:bl_reloadBlock];
     self.mj_footer = footer;
 }
 
-- (void)endBLReload{
+- (void)endBLReloadWithPlaceHolder:(NSString *)imageName title:(NSString *)noDataTitle {
     
     if (self.mj_header.isRefreshing) {
         
@@ -89,14 +93,18 @@
     
     if ([self getUIScrollViewItemsCount]) {
         
-        [self.showView removeFromSuperview];
+        self.showView.hidden = YES;
     } else {
-        
-        [self.showView showViewWithFirstTitle:YES secondTitle:NO btnTitle:@"点击重试" imageName:@"占位图"];
-        [self.showView firstLabel:@"暂无数据" normalColor:[UIColor blueColor]];
+        self.showView.hidden = NO;
+        [self noDataPlaceholder:imageName firstTitle:noDataTitle];
     }
 }
 
+- (void)noDataPlaceholder:(NSString *)iconName firstTitle:(NSString *)title {
+    
+    [self.showView showViewWithFirstTitle:YES secondTitle:NO btnTitle:@"点击重试" imageName:iconName];
+    [self.showView firstLabel:title normalColor:[UIColor darkGrayColor]];
+}
 
 
 /*! currentindex，cell 当前行
@@ -115,7 +123,7 @@
 
 
 - (NSInteger)getUIScrollViewItemsCount {
- 
+    
     NSInteger items = 0;
     
     // UIScollView 数据源不存在，退出

@@ -50,11 +50,15 @@ typedef void(^BLRefreshBlock)(void);
  */
 - (void)footerReloadBlock:(BLRefreshBlock)bl_reloadBlock;
 
-
+/*! 开始刷新 */
+- (void) startRefreshing;
 /**
  *  结束上拉刷新
+ *  @param imageName 无数据图片占位图
+ *  @param noDataTitle 无数据显示文字
+ 
  */
-- (void)endBLReload;
+- (void)endBLReloadWithPlaceHolder:(NSString *)imageName title:(NSString *)noDataTitle;
 
 
 

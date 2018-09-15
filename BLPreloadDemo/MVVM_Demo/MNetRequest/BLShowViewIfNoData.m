@@ -8,7 +8,6 @@
 
 #import "BLShowViewIfNoData.h"
 #import <Masonry.h>
-
 @interface BLShowViewIfNoData ()
 
 /*! 显示文字 */
@@ -73,7 +72,7 @@
         
         [self.firstLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(weakSelf);
-            make.centerY.equalTo(weakSelf).offset(10+10+20);//图片上边距，下间距
+            make.centerY.equalTo(weakSelf);//图片上边距，下间距
         }];
     }
     
@@ -106,9 +105,9 @@
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         
         if (isfirst) {
-           
+            
             make.bottom.equalTo(weakSelf.firstLabel.mas_top)
-            .offset(-8);
+            .offset(-15);
         } else {
             
             make.centerY.equalTo(weakSelf);

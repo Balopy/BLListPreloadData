@@ -65,11 +65,13 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
 //        weakSelf.tableView.sourceData = response;
         weakSelf.tableView.dataArray = response;
 
-        [weakSelf.tableView endBLReload];
+        [weakSelf.tableView endBLReloadWithPlaceHolder:@"占位图" title:@"暂无数据"];
    
     } failure:^(NSError *failure) {
-       
-        [weakSelf.tableView endBLReload];
+        [weakSelf.tableView endBLReloadWithPlaceHolder:@"占位图" title:@"暂无数据"];
+        if (failure) {
+            [weakSelf.tableView reloadData];
+        }
     }];
 }
 
