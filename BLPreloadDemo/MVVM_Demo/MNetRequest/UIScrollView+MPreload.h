@@ -18,7 +18,7 @@
 static NSInteger const PreloadMinCount = 3;
 
 /*! 预加载用 */
-typedef void(^BLPreloadBlock)(BOOL refresh);
+typedef void(^BLPreloadBlock)(void);
 
 /*! 刷新用 */
 typedef void(^BLRefreshBlock)(void);
@@ -56,7 +56,7 @@ typedef void(^BLRefreshBlock)(void);
  *  结束上拉刷新
  *  @param imageName 无数据图片占位图
  *  @param noDataTitle 无数据显示文字
- 
+
  */
 - (void)endBLReloadWithPlaceHolder:(NSString *)imageName title:(NSString *)noDataTitle;
 

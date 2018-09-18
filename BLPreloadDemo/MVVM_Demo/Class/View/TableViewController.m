@@ -53,7 +53,7 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
     
     cell.textLabel.text = item.teacherName;
     cell.detailTextLabel.text = item.depict;
-    
+
     [cell.imageView setImageURL:[NSURL URLWithString:@"http://img.51xiaoniu.cn/product/main_assets/assets/5712/0941/206a/af16/68f3/088a/569869fbaf4843084c0007ba.jpg"]];
     
     return cell;

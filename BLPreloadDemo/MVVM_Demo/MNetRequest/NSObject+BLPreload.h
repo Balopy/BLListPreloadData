@@ -14,7 +14,7 @@
 
 
 /**  *  当前页码 */
-@property (nonatomic, assign) NSInteger currentPage;
+@property (nonatomic, assign) NSInteger currentblPage;
 
 
 /** 上拉加载更多无更多数据 */
@@ -22,6 +22,7 @@
 
 /** *  模型数组 */
 @property (nonatomic, strong) NSMutableArray *model_blArray;
+
 
 
 /**
@@ -45,7 +46,7 @@
  MJWeakSelf
  __block NSMutableArray *tempArr = @[].mutableCopy;
  [self.tableView request:config success:^(id response) {
-
+ 
  [weakSelf.myRecordTableView endBLReload];
  [weakSelf.myRecordTableView reloadData];
  
@@ -58,7 +59,7 @@
  }];
  
  }
-*/
+ */
 - (void)request:(BLRequestConfig *)config success:(void (^)(id response))success failure:(void (^)(NSError * failure))failure;
 
 @end

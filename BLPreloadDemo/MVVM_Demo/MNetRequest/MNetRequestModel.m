@@ -7,113 +7,213 @@
 //
 
 #import "MNetRequestModel.h"
-#import<CommonCrypto/CommonDigest.h>
 
 @implementation MNetRequestModel
 
+/** 2 * 请求 */
++ (void)httpRequest:(BLRequestConfig *)config success:(void (^)(id))success failure:(void (^)(NSError *))failure {
+    
+    
+    __block MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:[[UIApplication sharedApplication].windows lastObject] animated:YES];
+    HUD.animationType=MBProgressHUDAnimationFade;
+    if (config.mbprogress) HUD.label.text = config.mbprogress;
+    else HUD.label.text = @"正在加载";
+    [HUD showAnimated:YES];
+    
+    NSDictionary *paramet = [BLRequestConfig parameterExchange:config.requestDict url:config.url];
+    NSCharacterSet *set = [NSCharacterSet URLQueryAllowedCharacterSet];
+    NSString *encoded = [config.url stringByAddingPercentEncodingWithAllowedCharacters:set];//请路径+加密参数
+    
+    
+    
+    NSString *tempstr = [NSString stringWithFormat:@"%@%@", config.url, config.requestDict];
+    NSString *path = [BLRequestConfig cacheFilePath:tempstr];
+    NSLog(@"缓存：%@", path);
 
-/** 1 * post 请求 无进度 */
-+ (void)request:(NSString *)urlString withParamters:(NSDictionary *)dic success:(void (^)(id responseData))success failure:(void (^)(NSError *error))failure {
-    
-    
-   NSDictionary *dictiont = [self parameterExchange:dic url:urlString];
-    
-    ///增加这几行代码；
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager.requestSerializer setTimeoutInterval:10.f];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
-    
-    [manager POST:urlString parameters:dictiont progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    AFHTTPSessionManager *manager = [self sessionManager];
+    [manager POST:encoded parameters:paramet progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         if (success != nil) {
             success(responseObject);
+            [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
         }
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         
         if (failure != nil) {
             failure(error);
+            [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
         }
         BLLog(@"----failure---%@", error.description);
+        
+        HUD.animationType = MBProgressHUDModeText;
+        
+        HUD.label.text=@"请求失败,重新发送请求";
+        [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
     }];
+    
 }
 
 
 
-/**
- 将路径进行md5加密
- 
- @param string 数据文件储存路径
- @return 加密后的文件路径
- */
-+ (NSString *)md5StringFromString:(NSString *)string {
-    NSParameterAssert(string != nil && [string length] > 0);
+
+/** 1 * post 请求 无进度 */
++ (void)request:(BLRequestConfig *)config success:(void (^)(id))success failure:(void (^)(NSError *))failure{
     
-    const char *value = [string UTF8String];
-    unsigned char outputBuffer[CC_MD5_DIGEST_LENGTH];
-    CC_MD5(value, (CC_LONG)strlen(value), outputBuffer);
+    NSDictionary *paramet = [BLRequestConfig parameterExchange:config.requestDict url:config.url];
+    NSCharacterSet *set = [NSCharacterSet URLQueryAllowedCharacterSet];
+    NSString *encoded = [config.url stringByAddingPercentEncodingWithAllowedCharacters:set];//请路径+加密参数
     
-    NSMutableString *outputString = [[NSMutableString alloc] initWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
-    for(NSInteger count = 0; count < CC_MD5_DIGEST_LENGTH; count++){
-        [outputString appendFormat:@"%02x",outputBuffer[count]];
+    
+    NSString *tempstr = [NSString stringWithFormat:@"%@%@", config.url, config.requestDict];
+    NSString *path = [BLRequestConfig cacheFilePath:tempstr];//文件路径
+    
+    
+    NSLog(@"缓存：%@", path);
+    
+    //设置缓存, 如果有缓存且没有过期,有就取。
+    BOOL timeValide = false;
+    timeValide = [BLRequestConfig inAvailabilityWithCachTime:config.cashTime path:path];
+
+    if (config.cashSeting && timeValide) {
+        
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        
+        BOOL isFileExist = [fileManager fileExistsAtPath:path];
+        
+        if (isFileExist) { //文件存在
+            //如果本地缓存存在
+            dispatch_async(dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                id cachedData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    if (success != nil)
+                        success(cachedData);
+                });
+            });
+            
+        } else {//如果文件不存，则去请求数据，创建缓存，这个方法，可能不会走，因为一般都会创建成功
+            
+            AFHTTPSessionManager *manager = [self sessionManager];
+            [manager POST:encoded parameters:paramet progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                
+                if (success) {
+                    success(responseObject);
+                    
+                    // 既有设置缓存数据, 简单粗爆，
+                    [self saveCashData:responseObject jsonValide:config.jsonValidator cachedPath:path];
+                }
+            } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+                
+                BLLog(@"----failure---%@", error.description);
+                if (failure != nil) {
+                    failure(error);
+                }
+            }];
+        }
+    } else {
+
+        ///增加这几行代码；
+        AFHTTPSessionManager *manager = [self sessionManager];
+        [manager POST:encoded parameters:paramet progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            
+            if (success) {
+                success(responseObject);
+                
+                if (config.cashSeting) {//如果设置缓存了，但是过期了
+                    
+                    if (!timeValide) {//如果过期了，重新缓存
+                        
+                        // 缓存数据, 简单粗爆，
+                        [self saveCashData:responseObject jsonValide:config.jsonValidator cachedPath:path];
+                    }
+                } else {
+                //没有缓存，pass
+                }
+            }
+        } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
+            
+            BLLog(@"----failure---%@", error.description);
+            if (failure != nil) {
+                failure(error);
+            }
+        }];
     }
+}
+
++ (AFHTTPSessionManager *) sessionManager {
+    ///增加这几行代码；
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
-    return outputString;
+    [manager.requestSerializer setTimeoutInterval:10.f];
+    
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", nil];
+    return manager;
+}
+
++(void)saveCashData:(id)responseData jsonValide:(NSString *)jsonValide cachedPath:(NSString *)path {
+    // 异步处理耗时操作(缓存数据)
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [BLRequestConfig saveCashDataForArchiver:responseData jsonValidator:jsonValide cachPath:path];
+    });
 }
 
 
-/*! 与后台约定加密码规则，所有参数进行排序，用|分隔，生成MD5串，以sign=MD5作为一个参数 */
-+(NSMutableDictionary *)parameterExchange:(NSDictionary *)setting url:(NSString *)url{
-    //获取时间戳
-    UInt64 timestamps = [[NSDate date] timeIntervalSince1970]*1000;
-   
-    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
-
-        parameter = setting.mutableCopy;
++ (void) uploadWithImagesInSeting:(BLRequestConfig *)config
+                          success:(void (^)(id responseData))success
+                          failure:(void (^)(NSError *error))failure{
     
-    [parameter setValue:@(timestamps) forKey:@"timestamps"];
-    [parameter setValue:@"YaIHNMXmx19560uE124SImc6Yyv85j943S7885M41Bs20v02L1oYY4b94QL3j72x9YfE37814h7092fGf9f054S6J83G1o3bT48I4p0s5KbS3Bd09A3q0C61vaL2audzr89Av258D5H32wr754d7Gzd0xe0D79zGd70703Iu642M5165VyyE3Lg4QF9524T956U4uR7HKZz0nYX236eC9von069nz7r7P" forKey:@"privateKey"];
+    __block NSMutableArray *tempArr = @[].mutableCopy;
+    /// UIImage对象 -> NSData对象
+    NSArray *icons = config.orginObject;
     
-    NSArray *dicKeysArray = [parameter allKeys];
-    //对 key 进行排序
-    NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch|NSNumericSearch|
-    NSWidthInsensitiveSearch|NSForcedOrderingSearch;
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", @"text/plain", nil];
     
-    NSComparator sort = ^(NSString *obj1,NSString *obj2){
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    
+    NSDictionary *paramet = [BLRequestConfig parameterExchange:config.requestDict url:config.url];
+    [manager POST:config.url parameters:paramet constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
-        NSRange range = NSMakeRange(0,obj1.length);
+        if (icons.count > 0) {
+            
+            for (int i = 0; i < icons.count; i++) {
+                UIImage *image = icons[i];
+                NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
+                if (imageData.length > 1024*1024) {
+                    //                    image = (UIImage *)[image imageByResizeToSize:CGSizeMake(kScreen_width, kScreen_width*(image.size.height/image.size.width)) contentMode:UIViewContentModeScaleAspectFill];
+                    
+                    imageData = UIImageJPEGRepresentation(image, 1);
+                }
+                // 可以在上传时使用当前的系统事件作为文件名
+                NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                // 设置时间格式
+                [formatter setDateFormat:@"yyyyMMddHHmmss"];
+                NSString *dateString = [formatter stringFromDate:[NSDate date]];
+                NSString *fileName = [NSString stringWithFormat:@"%d%@.png", i, dateString];
+                
+                [formData appendPartWithFileData:imageData name:@"fileupload" fileName:fileName mimeType:@"image/png"];
+            }
+        }
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
-        return [obj1 compare:obj2 options:comparisonOptions range:range];
-    };
-    
-    NSArray *resultArray = [dicKeysArray sortedArrayUsingComparator:sort];
-    //拼接sign字符串
-    NSString *signForString = @"";
-    //拼接url参数
-    NSString *urlWithParamterString = [url stringByAppendingString:@"?"];
-    
-    for (NSString *key in resultArray){
+        if (responseObject) {
+            NSData *reciveData = responseObject;
+            NSString *reciveString = [[NSString alloc]initWithData:reciveData encoding:NSUTF8StringEncoding];
+            [tempArr addObject:reciveString];
+            if (success) {
+                success(tempArr);
+            }
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        NSString *temp = [NSString stringWithFormat:@"%@|%@|", key, [parameter objectForKey:key]];
-        signForString = [signForString stringByAppendingString:temp];
-        
-        NSString *paramer = [NSString stringWithFormat:@"%@=%@&", key, [parameter objectForKey:key]];
-        urlWithParamterString = [urlWithParamterString stringByAppendingString:paramer];
-    }
-    
-    
-    //删除最后一个字符"|"
-    signForString = [signForString substringToIndex:signForString.length - 1];
-    
-    //进行 md5 编码,生成 sign 值
-    NSString *sign = [self md5StringFromString:signForString];
-    [parameter setValue:sign forKey:@"sign"];
-    
-    //将最后一个 sign 值也拼接到字符串中打印
-    urlWithParamterString = [urlWithParamterString stringByAppendingString:[NSString stringWithFormat:@"%@=%@", @"sign", sign]];
-    BLLog(@"\n\n路径--%@\n\n", urlWithParamterString);
-    return parameter;
+        BLLog(@"Error: %@", error);
+        if (failure)  failure(error);
+    }];
 }
 
 
@@ -139,6 +239,8 @@
     }
     BLLog(@"\n\n路径--%@", tempStr);
 }
+
+
 
 @end
 

@@ -7,7 +7,7 @@
 //
 
 #import "BLShowViewIfNoData.h"
-#import <Masonry.h>
+
 @interface BLShowViewIfNoData ()
 
 /*! 显示文字 */
@@ -36,11 +36,11 @@
         
         UIButton *reloadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         reloadBtn.blTitle = @"";
-        reloadBtn.backgroundColor = [UIColor redColor];
+        reloadBtn.backgroundColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1];
         reloadBtn.blColor = [UIColor whiteColor];
         reloadBtn.blFont = [UIFont systemFontOfSize:14];
-        reloadBtn.layer.cornerRadius = 20;
-        
+        reloadBtn.layer.cornerRadius = 15;
+        reloadBtn.bl_acceptEventInterval = 1.5;
         [reloadBtn addTarget:self action:@selector(reloadBtnClick:) forControlEvents:UIControlEventTouchUpInside];
         
         [self addSubview:reloadBtn];
@@ -99,13 +99,13 @@
         
         CGFloat width = [title widthForFont:weakSelf.reloadBtn.blFont] + 30;
         make.width.equalTo(@(width));
-        make.height.equalTo(@(40));
+        make.height.equalTo(@(30));
     }];
     
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         
         if (isfirst) {
-            
+           
             make.bottom.equalTo(weakSelf.firstLabel.mas_top)
             .offset(-15);
         } else {

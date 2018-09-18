@@ -28,14 +28,18 @@
     if (config.keyOfPage) {// 有分页才会走
         
         if (config.isRefreshing) {//如果刷新，置1
-            self.currentPage = 1;
+            self.currentblPage = 1;
         }
-        [paramer setValue:@(self.currentPage) forKey:config.keyOfPage];
-        self.currentPage++;//加1，回到第一页
+        [paramer setValue:@(self.currentblPage) forKey:config.keyOfPage];
+        self.currentblPage ++;//加1，回到第一页
+        
+        BLLog(@"currentPage---%lu", self.currentblPage);
     }
+    // 重新赋值
+    config.requestDict = paramer;
     
     //请求数据
-    [MNetRequestModel request:config.url withParamters:paramer success:^(id responseData) {
+    [MNetRequestModel request:config success:^(id responseData) {
         
         config.orginObject = responseData;//源数据，后面需要针对模型进行处理
         
@@ -99,7 +103,7 @@
     } failure:^(NSError *error) {
         
         //请求失败，刷新再次请求当前页
-        if (self.currentPage > 1)  self.currentPage --;
+        if (self.currentblPage > 1)  self.currentblPage --;
         
         if (failure)  failure(error);
     }];
@@ -120,13 +124,13 @@
 }
 
 
-- (NSInteger)currentPage{
+- (NSInteger)currentblPage{
     return [objc_getAssociatedObject(self, _cmd) integerValue];
 }
 
-- (void)setCurrentPage:(NSInteger)currentPage{
+- (void)setCurrentblPage:(NSInteger)currentblPage{
     
-    objc_setAssociatedObject(self, @selector(currentPage), @(currentPage), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, @selector(currentblPage), @(currentblPage), OBJC_ASSOCIATION_ASSIGN);
 }
 
 - (BOOL)noRefreshData {

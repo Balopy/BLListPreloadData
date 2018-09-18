@@ -8,10 +8,21 @@
 
 #import <Foundation/Foundation.h>
 
+@class BLRequestConfig;
 
 @interface MNetRequestModel : NSObject
 
-+ (void)request:(NSString *)urlString withParamters:(NSDictionary *)dic success:(void (^)(id responseData))success failure:(void (^)(NSError *error))failure;
+/** 1 * post 请求 无进度 */
++ (void)httpRequest:(BLRequestConfig *)config success:(void (^)(id responseData))success failure:(void (^)(NSError *error))failure;
+
+
+/** 2 * post 请求 无进度 */
++ (void)request:(BLRequestConfig *)config success:(void (^)(id responseData))success failure:(void (^)(NSError *error))failure;
+
+
++ (void) uploadWithImagesInSeting:(BLRequestConfig *)config
+                          success:(void (^)(id responseData))success
+                          failure:(void (^)(NSError *error))failure;
 
 @end
 

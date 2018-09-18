@@ -38,7 +38,7 @@
         showView.hidden = YES;
         showView.reloadDataBlock = ^(UIButton *paramer) {
             
-            if (self.bl_preloadBlock) self.bl_preloadBlock(YES);
+            [self startRefreshing];
         };
         [self addSubview:showView];
         
@@ -66,7 +66,7 @@
 
 - (void)startRefreshing {
     [self.mj_header beginRefreshing];
-    
+
 }
 - (void)footerReloadBlock:(BLRefreshBlock)bl_reloadBlock {
     
@@ -116,14 +116,14 @@
     
     if (same && big && self.bl_preloadBlock) {
         
-        self.bl_preloadBlock(NO);
+        self.bl_preloadBlock();
     }
 }
 
 
 
 - (NSInteger)getUIScrollViewItemsCount {
-    
+ 
     NSInteger items = 0;
     
     // UIScollView 数据源不存在，退出

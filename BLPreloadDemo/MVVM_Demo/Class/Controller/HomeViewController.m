@@ -54,6 +54,7 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
     config.convertKeyPath = @"entity";
     config.modelClass = @"BLListItem";
     config.isRefreshing = refresh;
+    config.cashSeting = YES;
     config.jsonValidator = @{@"entity":[NSArray class]};
     config.requestDict = @{ @"currentPage": @1 }.mutableCopy;
     
@@ -61,7 +62,6 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
     
     [self.tableView request:config success:^(id response) {
         
-        BLLog(@"%@", response);
 //        weakSelf.tableView.sourceData = response;
         weakSelf.tableView.dataArray = response;
 
@@ -84,9 +84,9 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
         [weakself signalFromTableViewRefresh:YES];
     }];
 
-    self.tableView.bl_preloadBlock = ^(BOOL refresh) {
+    self.tableView.bl_preloadBlock = ^{
         
-        [weakself signalFromTableViewRefresh:refresh];
+        [weakself signalFromTableViewRefresh:NO];
     };
     
     [self.tableView footerReloadBlock:^{
