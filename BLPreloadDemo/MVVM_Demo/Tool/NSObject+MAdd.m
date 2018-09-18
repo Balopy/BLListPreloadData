@@ -4,7 +4,7 @@
 //
 //  Created by yizhilu on 2017/12/18.
 //  Copyright © 2017年 Magic. All rights reserved.
-//
+
 /**
  *关于自动移除KVO 详见网址
  *https://mp.weixin.qq.com/s/NdPgtpBHL7h8sqN-rui_LA

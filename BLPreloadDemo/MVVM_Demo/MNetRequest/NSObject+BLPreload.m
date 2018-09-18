@@ -39,7 +39,7 @@
     config.requestDict = paramer;
     
     //请求数据
-    [MNetRequestModel request:config success:^(id responseData) {
+    [BLNetRequestModel request:config success:^(id responseData) {
         
         config.orginObject = responseData;//源数据，后面需要针对模型进行处理
         

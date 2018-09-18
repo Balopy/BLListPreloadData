@@ -1,14 +1,14 @@
 //
-//  MNetRequestModel.m
+//  BLNetRequestModel.m
 //  MLoadMoreService
 //
 //  Created by yizhilu on 2017/9/7.
 //  Copyright © 2017年 Magic. All rights reserved.
 //
 
-#import "MNetRequestModel.h"
+#import "BLNetRequestModel.h"
 
-@implementation MNetRequestModel
+@implementation BLNetRequestModel
 
 /** 2 * 请求 */
 + (void)httpRequest:(BLRequestConfig *)config success:(void (^)(id))success failure:(void (^)(NSError *))failure {

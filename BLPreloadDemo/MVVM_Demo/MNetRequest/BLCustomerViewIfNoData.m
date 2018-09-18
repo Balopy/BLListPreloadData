@@ -1,14 +1,14 @@
 //
-//  BLShowViewIfNoData.m
+//  BLCustomerViewIfNoData.m
 //  Demo_268EDU
 //
 //  Created by 268 on 2017/11/22.
 //  Copyright © 2017年 Magic. All rights reserved.
 //
 
-#import "BLShowViewIfNoData.h"
+#import "BLCustomerViewIfNoData.h"
 
-@interface BLShowViewIfNoData ()
+@interface BLCustomerViewIfNoData ()
 
 /*! 显示文字 */
 @property (weak, nonatomic) UIImageView *imageView;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation BLShowViewIfNoData
+@implementation BLCustomerViewIfNoData
 
 + (instancetype) showView:(CGRect)frame {
     return [[self alloc] initWithFrame:frame];

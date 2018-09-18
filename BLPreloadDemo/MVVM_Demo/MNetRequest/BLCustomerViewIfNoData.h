@@ -1,5 +1,5 @@
 //
-//  BLShowViewIfNoData.h
+//  BLCustomerViewIfNoData.h
 //  Demo_268EDU
 //
 //  Created by 268 on 2017/11/22.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 typedef void(^BLSuccessBlock)(UIButton *paramer);
-@interface BLShowViewIfNoData : UIView
+@interface BLCustomerViewIfNoData : UIView
 
 
 + (instancetype) showView:(CGRect)frame;

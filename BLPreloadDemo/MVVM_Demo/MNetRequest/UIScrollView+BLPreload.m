@@ -1,18 +1,18 @@
 //
-//  UIScrollView+MPreload.m
+//  UIScrollView+BLPreload.m
 //  MLoadMoreService
 //
 //  Created by yizhilu on 2017/9/8.
 //  Copyright © 2017年 Magic. All rights reserved.
 //
 
-#import "UIScrollView+MPreload.h"
+#import "UIScrollView+BLPreload.h"
 #import <objc/runtime.h>
 #import "NSObject+BLPreload.h"
-#import "BLShowViewIfNoData.h"
+#import "BLCustomerViewIfNoData.h"
 
 @interface UIScrollView ()
-@property (nonatomic, strong) BLShowViewIfNoData *showView;
+@property (nonatomic, strong) BLCustomerViewIfNoData *showView;
 
 @end
 @implementation UIScrollView (MPreload)
@@ -27,14 +27,14 @@
 }
 
 
-- (BLShowViewIfNoData *)showView{
+- (BLCustomerViewIfNoData *)showView{
     
-    BLShowViewIfNoData *showView = objc_getAssociatedObject(self, _cmd);
+    BLCustomerViewIfNoData *showView = objc_getAssociatedObject(self, _cmd);
     if (!showView) {
         
         CGRect frame = self.frame;
         frame.origin = CGPointZero;
-        showView = [BLShowViewIfNoData showView:frame];
+        showView = [BLCustomerViewIfNoData showView:frame];
         showView.hidden = YES;
         showView.reloadDataBlock = ^(UIButton *paramer) {
             
@@ -51,7 +51,7 @@
 
 
 
-- (void)setShowView:(BLShowViewIfNoData *)showView {
+- (void)setShowView:(BLCustomerViewIfNoData *)showView {
     
     objc_setAssociatedObject(self, @selector(showView), showView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
