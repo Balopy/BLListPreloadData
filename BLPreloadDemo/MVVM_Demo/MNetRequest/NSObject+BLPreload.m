@@ -34,7 +34,7 @@
         [paramer setValue:@(self.currentblPage) forKey:config.keyOfPage];
         self.currentblPage ++;//加1，回到第一页
         
-        BLLog(@"currentPage---%lu", self.currentblPage);
+        NSLog(@"currentPage---%lu", self.currentblPage);
     }
     // 重新赋值
     config.requestDict = paramer;

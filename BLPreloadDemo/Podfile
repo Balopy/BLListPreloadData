@@ -3,10 +3,7 @@ target 'MVVM_Demo' do
 
 pod 'AFNetworking'
 pod 'MJRefresh'
-
-pod 'YYKit'
 pod 'BalopyKit'
 pod 'Masonry'
 
-pod 'MBProgressHUD'
 end

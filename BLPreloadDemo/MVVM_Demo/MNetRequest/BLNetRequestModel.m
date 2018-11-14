@@ -77,7 +77,7 @@
                 if (failure != nil) {
                     failure(error);
                 }
-                BLLog(@"----failure---%@", error.description);
+                NSLog(@"----failure---%@", error.description);
                 
                 HUD.animationType = MBProgressHUDModeText;
                 HUD.label.text=@"请求失败,重新发送请求";
@@ -113,7 +113,7 @@
             if (failure != nil) {
                 failure(error);
             }
-            BLLog(@"----failure---%@", error.description);
+            NSLog(@"----failure---%@", error.description);
             HUD.animationType = MBProgressHUDModeText;
             HUD.label.text=@"请求失败,重新发送请求";
             [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
@@ -190,7 +190,7 @@
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
-        BLLog(@"Error: %@", error);
+        NSLog(@"Error: %@", error);
         if (failure)  failure(error);
     }];
 }

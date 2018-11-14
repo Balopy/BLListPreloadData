@@ -26,6 +26,7 @@
 		9FCFD0F2214294C600266774 /* CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFD0F1214294C600266774 /* CollectionViewCell.m */; };
 		9FF2C75C219C7CA500703E8F /* NSObject+BLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF2C759219C7CA500703E8F /* NSObject+BLModel.m */; };
 		9FF2C75D219C7CA500703E8F /* BLClassInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF2C75A219C7CA500703E8F /* BLClassInformation.m */; };
+		9FF2C760219C869000703E8F /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF2C75F219C869000703E8F /* MBProgressHUD.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,8 @@
 		9FF2C759219C7CA500703E8F /* NSObject+BLModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BLModel.m"; sourceTree = "<group>"; };
 		9FF2C75A219C7CA500703E8F /* BLClassInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLClassInformation.m; sourceTree = "<group>"; };
 		9FF2C75B219C7CA500703E8F /* NSObject+BLModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+BLModel.h"; sourceTree = "<group>"; };
+		9FF2C75E219C869000703E8F /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		9FF2C75F219C869000703E8F /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		E8C175DA72065F126A504ECF /* Pods-MVVM_Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM_Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM_Demo/Pods-MVVM_Demo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -213,6 +216,8 @@
 				9F1842D2214764200099EC6B /* BLCustomerViewIfNoData.m */,
 				9FCFD0E72142235900266774 /* BLRequestConfig.h */,
 				9FCFD0E82142235900266774 /* BLRequestConfig.m */,
+				9FF2C75E219C869000703E8F /* MBProgressHUD.h */,
+				9FF2C75F219C869000703E8F /* MBProgressHUD.m */,
 			);
 			path = MNetRequest;
 			sourceTree = "<group>";
@@ -451,6 +456,7 @@
 				9F41DB3D206F1F8800AE93D0 /* AppDelegate.m in Sources */,
 				9F44311A20EDFEC7001F1A39 /* BLNetRequestModel.m in Sources */,
 				9FCFD0F2214294C600266774 /* CollectionViewCell.m in Sources */,
+				9FF2C760219C869000703E8F /* MBProgressHUD.m in Sources */,
 				9FCFD0E0214213EC00266774 /* BLListItem.m in Sources */,
 				9FCFD0E62142226C00266774 /* NSObject+BLPreload.m in Sources */,
 				9FF2C75C219C7CA500703E8F /* NSObject+BLModel.m in Sources */,

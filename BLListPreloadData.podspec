@@ -23,7 +23,7 @@ Hope userful to you!
 
 
 
-  s.author             = { "wangchunlong" => "wangchunlong@268xue.com" }
+  s.author             = { "wangchunlong" => "lueng2yuan@163.com" }
 
 
    s.platform     = :ios

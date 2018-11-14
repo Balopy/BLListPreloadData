@@ -46,7 +46,7 @@
     BOOL success = [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error];
     
     if (success) {
-        BLLog(@"创建成功");
+        NSLog(@"创建成功");
     }
 }
 
@@ -89,7 +89,7 @@
     //通过文件管理器来获得属性
     NSDictionary *fileAttributes = [fileManager attributesOfItemAtPath:path error:&error];
     NSDate *fileCreateDate = [fileAttributes objectForKey:NSFileCreationDate];
-    BLLog(@"--fileCreateDate--%@", fileCreateDate);
+    NSLog(@"--fileCreateDate--%@", fileCreateDate);
     
     return fileCreateDate;
 }
@@ -99,7 +99,7 @@
 {
     
     NSComparisonResult result = [currentTime compare:fileCreatTime];
-    BLLog(@"--result-%lu--%@---%@", (long)result, currentTime, fileCreatTime);
+    NSLog(@"--result-%lu--%@---%@", (long)result, currentTime, fileCreatTime);
     NSInteger aa = 0;
     
     if (result == NSOrderedDescending) {//降--大
@@ -123,7 +123,7 @@
                 if (result) {
                     BOOL cashResule = [NSKeyedArchiver archiveRootObject:responseData toFile:path];
                     if (cashResule) {
-                        BLLog(@"本地数据缓存成功");
+                        NSLog(@"本地数据缓存成功");
                     }
                 }else{
                     //格式不正确
@@ -141,7 +141,7 @@
                 [NSKeyedArchiver archiveRootObject:responseData toFile:path];
             }
         } @catch (NSException *exception) {
-            BLLog(@"Save cache failed, reason = %@", exception.reason);
+            NSLog(@"Save cache failed, reason = %@", exception.reason);
         }
     }
 }
@@ -158,7 +158,7 @@
     [formatter setTimeZone:timeZone];
     
     NSDate *datenow = [NSDate date];
-    BLLog(@"---datenow--%@", datenow);
+    NSLog(@"---datenow--%@", datenow);
     NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]*1000];
     return timeSp;
 }
@@ -213,7 +213,7 @@
 
     urlWithParamterString = [urlWithParamterString substringToIndex:urlWithParamterString.length-1];
 
-    BLLog(@"\n\n路径--%@\n\n", urlWithParamterString);
+    NSLog(@"\n\n路径--%@\n\n", urlWithParamterString);
     return parameter;
 }
 
