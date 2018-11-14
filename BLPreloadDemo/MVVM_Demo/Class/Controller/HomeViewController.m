@@ -27,7 +27,7 @@
 
 @implementation HomeViewController
 
-static NSString *const Test_Page_URL = @"https://api.268xue.com/sysApi/api/sys/teacher/getTeacherList";
+static NSString *const Test_Page_URL = @"http://t.268xue.com/app/study/records.json";
 
 static NSString *classGrandDynamicID = @"classGrandDynamicID";
 
@@ -50,19 +50,19 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
     BLRequestConfig *config = [BLRequestConfig new];
   
     config.url = Test_Page_URL;
-    config.keyOfPage = @"currentPage";
-    config.convertKeyPath = @"entity";
+    config.keyOfPage = @"page.currentPage";
+    config.convertKeyPath = @"entity/studyList";
     config.modelClass = @"BLListItem";
     config.isRefreshing = refresh;
     config.cashSeting = YES;
+    
+    config.requestDict = @{ @"userId": @"97" }.mutableCopy;
     config.jsonValidator = @{@"entity":[NSArray class]};
-    config.requestDict = @{ @"currentPage": @1 }.mutableCopy;
     
     __weak typeof(self) weakSelf = self;
     
     [self.tableView request:config success:^(id response) {
         
-//        weakSelf.tableView.sourceData = response;
         weakSelf.tableView.dataArray = response;
 
         [weakSelf.tableView endBLReloadWithPlaceHolder:@"占位图" title:@"暂无数据"];
@@ -79,7 +79,8 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
    
     __weak typeof(self) weakself = self;
 
-    [self.tableView headerReloadBlock:^{
+    [self.tableView bl_HeaderReloadBlock:^{
+        
         
         [weakself signalFromTableViewRefresh:YES];
     }];
@@ -88,11 +89,7 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
         
         [weakself signalFromTableViewRefresh:NO];
     };
-    
-    [self.tableView footerReloadBlock:^{
-       
-        [weakself signalFromTableViewRefresh:NO];
-    }];
+
     
 }
 

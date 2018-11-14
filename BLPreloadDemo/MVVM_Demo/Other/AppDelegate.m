@@ -23,7 +23,8 @@
     HomeViewController *vc = [[HomeViewController alloc] init];
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    
+    nav.navigationBar.translucent = NO;
+    nav.automaticallyAdjustsScrollViewInsets = NO;
     self.window.rootViewController = nav;
     
     [self.window makeKeyAndVisible];

@@ -7,6 +7,9 @@
 //
 
 #import "BLCustomerViewIfNoData.h"
+#import <Masonry.h>
+#import "UIButton+Balopy.h"
+
 
 @interface BLCustomerViewIfNoData ()
 
@@ -57,6 +60,9 @@
 }
 - (void)showViewWithFirstTitle:(BOOL)isfirst secondTitle:(BOOL)isSecond btnTitle:(NSString *)title imageName:(NSString *)imagename {
     
+    if (!title) {
+        title = @"";
+    }
     UIImage *image = [UIImage imageNamed:imagename];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -65,22 +71,21 @@
         });
     });
     
-    
-    MJWeakSelf
+    NSLog(@"------%@", NSStringFromCGRect(self.frame));
     
     if (isfirst) {//有值
         
         [self.firstLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(weakSelf);
-            make.centerY.equalTo(weakSelf);//图片上边距，下间距
+            make.centerX.equalTo(self);
+            make.centerY.equalTo(self);//图片上边距，下间距
         }];
     }
     
     if (isSecond) {//有值
         
         [self.secondLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(weakSelf.firstLabel.mas_bottom).offset(8);
-            make.centerX.equalTo(weakSelf);
+            make.top.equalTo(self.firstLabel.mas_bottom).offset(8);
+            make.centerX.equalTo(self);
         }];
     }
     
@@ -89,15 +94,18 @@
     [self.reloadBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         
         if (isSecond) {//默认有二
-            make.top.equalTo(weakSelf.secondLabel.mas_bottom).offset(20);
+            make.top.equalTo(self.secondLabel.mas_bottom).offset(20);
         } else if (isfirst) {
-            make.top.equalTo(weakSelf.firstLabel.mas_bottom).offset(20);
+            make.top.equalTo(self.firstLabel.mas_bottom).offset(20);
         } else {
-            make.top.equalTo(weakSelf.imageView.mas_bottom).offset(20);
+            make.top.equalTo(self.imageView.mas_bottom).offset(20);
         }
-        make.centerX.equalTo(weakSelf);
+        make.centerX.equalTo(self);
         
-        CGFloat width = [title widthForFont:weakSelf.reloadBtn.blFont] + 30;
+        CGFloat width = [title sizeWithFont:self.reloadBtn.blFont].width + 30;
+        if (title.length == 0) {
+            width = 0;
+        }
         make.width.equalTo(@(width));
         make.height.equalTo(@(30));
     }];
@@ -106,17 +114,14 @@
         
         if (isfirst) {
            
-            make.bottom.equalTo(weakSelf.firstLabel.mas_top)
+            make.bottom.equalTo(self.firstLabel.mas_top)
             .offset(-15);
         } else {
             
-            make.centerY.equalTo(weakSelf);
+            make.centerY.equalTo(self);
         }
-        make.centerX.equalTo(weakSelf);
+        make.centerX.equalTo(self);
     }];
-    
-    
-    
 }
 
 - (void)firstLabel:(NSString *)mark attributedStr:(NSString *)attributed normalColor:(UIColor *)color selectedColor:(UIColor *)selected {

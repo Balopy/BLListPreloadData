@@ -17,7 +17,6 @@
 		9F41DB60206F1F8800AE93D0 /* MVVM_DemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F41DB5F206F1F8800AE93D0 /* MVVM_DemoUITests.m */; };
 		9F44311A20EDFEC7001F1A39 /* BLNetRequestModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F44310F20EDFEC7001F1A39 /* BLNetRequestModel.m */; };
 		9F44311C20EDFEC7001F1A39 /* UIScrollView+BLPreload.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F44311520EDFEC7001F1A39 /* UIScrollView+BLPreload.m */; };
-		9F44312220EE0259001F1A39 /* NSObject+MAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F44312120EE0259001F1A39 /* NSObject+MAdd.m */; };
 		9FC36696206F7F4B00E607F1 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FC36694206F7F4B00E607F1 /* HomeViewController.m */; };
 		9FCFD0E0214213EC00266774 /* BLListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFD0DF214213EC00266774 /* BLListItem.m */; };
 		9FCFD0E62142226C00266774 /* NSObject+BLPreload.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFD0E52142226C00266774 /* NSObject+BLPreload.m */; };
@@ -25,6 +24,8 @@
 		9FCFD0EC214284B600266774 /* TableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFD0EB214284B600266774 /* TableViewController.m */; };
 		9FCFD0EF2142941300266774 /* BLCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFD0EE2142941300266774 /* BLCollectionView.m */; };
 		9FCFD0F2214294C600266774 /* CollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FCFD0F1214294C600266774 /* CollectionViewCell.m */; };
+		9FF2C75C219C7CA500703E8F /* NSObject+BLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF2C759219C7CA500703E8F /* NSObject+BLModel.m */; };
+		9FF2C75D219C7CA500703E8F /* BLClassInformation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FF2C75A219C7CA500703E8F /* BLClassInformation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,8 +68,6 @@
 		9F44311320EDFEC7001F1A39 /* BLNetRequestHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLNetRequestHeader.h; sourceTree = "<group>"; };
 		9F44311520EDFEC7001F1A39 /* UIScrollView+BLPreload.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScrollView+BLPreload.m"; sourceTree = "<group>"; };
 		9F44311620EDFEC7001F1A39 /* BLNetRequestModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLNetRequestModel.h; sourceTree = "<group>"; };
-		9F44312020EE0259001F1A39 /* NSObject+MAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MAdd.h"; sourceTree = "<group>"; };
-		9F44312120EE0259001F1A39 /* NSObject+MAdd.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MAdd.m"; sourceTree = "<group>"; };
 		9FC36671206F28FB00E607F1 /* MVVM_Demo.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MVVM_Demo.pch; sourceTree = "<group>"; };
 		9FC36672206F37A900E607F1 /* MVVM_Demo-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MVVM_Demo-Bridging-Header.h"; sourceTree = "<group>"; };
 		9FC36693206F7F4B00E607F1 /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -85,6 +84,10 @@
 		9FCFD0EE2142941300266774 /* BLCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BLCollectionView.m; sourceTree = "<group>"; };
 		9FCFD0F0214294C600266774 /* CollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CollectionViewCell.h; sourceTree = "<group>"; };
 		9FCFD0F1214294C600266774 /* CollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CollectionViewCell.m; sourceTree = "<group>"; };
+		9FF2C758219C7CA500703E8F /* BLClassInformation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLClassInformation.h; sourceTree = "<group>"; };
+		9FF2C759219C7CA500703E8F /* NSObject+BLModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+BLModel.m"; sourceTree = "<group>"; };
+		9FF2C75A219C7CA500703E8F /* BLClassInformation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLClassInformation.m; sourceTree = "<group>"; };
+		9FF2C75B219C7CA500703E8F /* NSObject+BLModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+BLModel.h"; sourceTree = "<group>"; };
 		E8C175DA72065F126A504ECF /* Pods-MVVM_Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MVVM_Demo.release.xcconfig"; path = "Pods/Target Support Files/Pods-MVVM_Demo/Pods-MVVM_Demo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -196,6 +199,10 @@
 			isa = PBXGroup;
 			children = (
 				9F44311320EDFEC7001F1A39 /* BLNetRequestHeader.h */,
+				9FF2C758219C7CA500703E8F /* BLClassInformation.h */,
+				9FF2C75A219C7CA500703E8F /* BLClassInformation.m */,
+				9FF2C759219C7CA500703E8F /* NSObject+BLModel.m */,
+				9FF2C75B219C7CA500703E8F /* NSObject+BLModel.h */,
 				9F44311620EDFEC7001F1A39 /* BLNetRequestModel.h */,
 				9F44310F20EDFEC7001F1A39 /* BLNetRequestModel.m */,
 				9FCFD0E42142226C00266774 /* NSObject+BLPreload.h */,
@@ -213,8 +220,6 @@
 		9F44311F20EE0245001F1A39 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				9F44312020EE0259001F1A39 /* NSObject+MAdd.h */,
-				9F44312120EE0259001F1A39 /* NSObject+MAdd.m */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -448,9 +453,10 @@
 				9FCFD0F2214294C600266774 /* CollectionViewCell.m in Sources */,
 				9FCFD0E0214213EC00266774 /* BLListItem.m in Sources */,
 				9FCFD0E62142226C00266774 /* NSObject+BLPreload.m in Sources */,
+				9FF2C75C219C7CA500703E8F /* NSObject+BLModel.m in Sources */,
 				9FC36696206F7F4B00E607F1 /* HomeViewController.m in Sources */,
 				9FCFD0EF2142941300266774 /* BLCollectionView.m in Sources */,
-				9F44312220EE0259001F1A39 /* NSObject+MAdd.m in Sources */,
+				9FF2C75D219C7CA500703E8F /* BLClassInformation.m in Sources */,
 				9F1842D3214764200099EC6B /* BLCustomerViewIfNoData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

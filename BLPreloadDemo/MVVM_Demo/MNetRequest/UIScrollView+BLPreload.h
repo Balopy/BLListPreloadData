@@ -15,7 +15,7 @@
 /**
  *  预加载触发的数量
  */
-static NSInteger const PreloadMinCount = 3;
+static NSInteger const blPreloadMinCount = 3;
 
 /*! 预加载用 */
 typedef void(^BLPreloadBlock)(void);
@@ -23,7 +23,7 @@ typedef void(^BLPreloadBlock)(void);
 /*! 刷新用 */
 typedef void(^BLRefreshBlock)(void);
 
-@interface UIScrollView (MPreload)
+@interface UIScrollView (BLPreload)
 
 /**
  *  点击无数据view，重新刷新
@@ -35,31 +35,26 @@ typedef void(^BLRefreshBlock)(void);
  *
  *  @param currentIndex row or section
  */
-- (void)preloadDataWithCurrentIndex:(NSInteger)currentIndex totalCount:(NSUInteger)count;
+- (void)bl_PreloadDataWithCurrentIndex:(NSInteger)currentIndex totalCount:(NSUInteger)count;
 
 /**
  *  下拉刷新
  *  @param bl_reloadBlock 刷新回调
  */
-- (void)headerReloadBlock:(BLRefreshBlock)bl_reloadBlock;
+- (void)bl_HeaderReloadBlock:(BLRefreshBlock)bl_reloadBlock;
 
-
-/**
- *  上拉加载更多
- *  @param bl_reloadBlock 刷新回调
- */
-- (void)footerReloadBlock:(BLRefreshBlock)bl_reloadBlock;
 
 /*! 开始刷新 */
-- (void) startRefreshing;
+- (void) bl_StartRefreshing;
 /**
  *  结束上拉刷新
  *  @param imageName 无数据图片占位图
  *  @param noDataTitle 无数据显示文字
-
+ *  如果请求失败，则只用于error 不为空时的情况
  */
 - (void)endBLReloadWithPlaceHolder:(NSString *)imageName title:(NSString *)noDataTitle;
 
 
+@property (nonatomic, copy) void (^placeHoder_bl_heigt) (CGFloat maxY);
 
 @end

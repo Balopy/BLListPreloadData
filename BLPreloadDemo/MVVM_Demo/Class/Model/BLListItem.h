@@ -10,9 +10,9 @@
 
 @interface BLListItem : NSObject
 
-@property (nonatomic, copy ) NSString *teacherName;
-@property (nonatomic, copy ) NSString *avatar_url;
-@property (nonatomic, copy) NSString *depict;
+@property (nonatomic, copy ) NSString *courseName;
+@property (nonatomic, copy ) NSString *logo;
+@property (nonatomic, copy) NSString *title;
 
 
 

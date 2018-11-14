@@ -10,59 +10,24 @@
 
 @implementation BLNetRequestModel
 
-/** 2 * 请求 */
-+ (void)httpRequest:(BLRequestConfig *)config success:(void (^)(id))success failure:(void (^)(NSError *))failure {
-    
-    
-    __block MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:[[UIApplication sharedApplication].windows lastObject] animated:YES];
-    HUD.animationType=MBProgressHUDAnimationFade;
-    if (config.mbprogress) HUD.label.text = config.mbprogress;
-    else HUD.label.text = @"正在加载";
-    [HUD showAnimated:YES];
-    
-    NSDictionary *paramet = [BLRequestConfig parameterExchange:config.requestDict url:config.url];
-    NSCharacterSet *set = [NSCharacterSet URLQueryAllowedCharacterSet];
-    NSString *encoded = [config.url stringByAddingPercentEncodingWithAllowedCharacters:set];//请路径+加密参数
-    
-    
-    
-    NSString *tempstr = [NSString stringWithFormat:@"%@%@", config.url, config.requestDict];
-    NSString *path = [BLRequestConfig cacheFilePath:tempstr];
-    NSLog(@"缓存：%@", path);
-
-    AFHTTPSessionManager *manager = [self sessionManager];
-    [manager POST:encoded parameters:paramet progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        
-        if (success != nil) {
-            success(responseObject);
-            [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
-        }
-    } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
-        
-        if (failure != nil) {
-            failure(error);
-            [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
-        }
-        BLLog(@"----failure---%@", error.description);
-        
-        HUD.animationType = MBProgressHUDModeText;
-        
-        HUD.label.text=@"请求失败,重新发送请求";
-        [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
-    }];
-    
-}
-
-
-
 
 /** 1 * post 请求 无进度 */
 + (void)request:(BLRequestConfig *)config success:(void (^)(id))success failure:(void (^)(NSError *))failure{
     
+    __block MBProgressHUD *HUD;
+    
+    if (config.mbprogress) {
+        
+        HUD = [MBProgressHUD showHUDAddedTo:[[UIApplication sharedApplication].windows lastObject] animated:YES];
+        HUD.animationType=MBProgressHUDAnimationFade;
+        if (config.mbprogress) HUD.label.text = config.mbprogress;
+        else HUD.label.text = @"正在加载";
+        [HUD showAnimated:YES];
+    }
+    config.url = [config.url stringByAppendingString:@".json"];
     NSDictionary *paramet = [BLRequestConfig parameterExchange:config.requestDict url:config.url];
     NSCharacterSet *set = [NSCharacterSet URLQueryAllowedCharacterSet];
     NSString *encoded = [config.url stringByAddingPercentEncodingWithAllowedCharacters:set];//请路径+加密参数
-    
     
     NSString *tempstr = [NSString stringWithFormat:@"%@%@", config.url, config.requestDict];
     NSString *path = [BLRequestConfig cacheFilePath:tempstr];//文件路径
@@ -80,8 +45,8 @@
         
         BOOL isFileExist = [fileManager fileExistsAtPath:path];
         
-        if (isFileExist) { //文件存在
-            //如果本地缓存存在
+        if (isFileExist && !config.isRefreshing) { //文件存在且不设置刷新
+            //如果本地缓存存在，本地取
             dispatch_async(dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 
                 id cachedData = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
@@ -90,10 +55,11 @@
                     
                     if (success != nil)
                         success(cachedData);
+                    [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
                 });
             });
             
-        } else {//如果文件不存，则去请求数据，创建缓存，这个方法，可能不会走，因为一般都会创建成功
+        } else {//如果文件不存在或设置了刷新，则去重新请求数据，创建缓存
             
             AFHTTPSessionManager *manager = [self sessionManager];
             [manager POST:encoded parameters:paramet progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -103,25 +69,35 @@
                     
                     // 既有设置缓存数据, 简单粗爆，
                     [self saveCashData:responseObject jsonValide:config.jsonValidator cachedPath:path];
+                    [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
+
                 }
             } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
                 
-                BLLog(@"----failure---%@", error.description);
                 if (failure != nil) {
                     failure(error);
                 }
+                BLLog(@"----failure---%@", error.description);
+                
+                HUD.animationType = MBProgressHUDModeText;
+                HUD.label.text=@"请求失败,重新发送请求";
+                [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
             }];
         }
     } else {
 
-        ///增加这几行代码；
+        ///不设置缓存或者过期了
         AFHTTPSessionManager *manager = [self sessionManager];
         [manager POST:encoded parameters:paramet progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             
             if (success) {
+               
                 success(responseObject);
-                
-                if (config.cashSeting) {//如果设置缓存了，但是过期了
+               
+                [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
+
+                if (config.cashSeting) {
+                    //如果设置缓存了，但是过期了
                     
                     if (!timeValide) {//如果过期了，重新缓存
                         
@@ -134,10 +110,13 @@
             }
         } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
             
-            BLLog(@"----failure---%@", error.description);
             if (failure != nil) {
                 failure(error);
             }
+            BLLog(@"----failure---%@", error.description);
+            HUD.animationType = MBProgressHUDModeText;
+            HUD.label.text=@"请求失败,重新发送请求";
+            [HUD performSelector:@selector(removeFromSuperview)  withObject:nil afterDelay:0.0];
         }];
     }
 }
@@ -185,7 +164,7 @@
                 UIImage *image = icons[i];
                 NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
                 if (imageData.length > 1024*1024) {
-                    //                    image = (UIImage *)[image imageByResizeToSize:CGSizeMake(kScreen_width, kScreen_width*(image.size.height/image.size.width)) contentMode:UIViewContentModeScaleAspectFill];
+          
                     
                     imageData = UIImageJPEGRepresentation(image, 1);
                 }
@@ -215,32 +194,6 @@
         if (failure)  failure(error);
     }];
 }
-
-
-
-#pragma mark ---- 打印路径  ----
-+ (void)printRequestUrlString:(NSString *)urlString withParamter:(NSDictionary *)dic {
-    
-    if (!dic) {
-        BLLog(@"\n\n路径--%@", urlString);
-        return;
-    }
-    __block NSString *tempStr = [urlString stringByAppendingString:@"?"];
-    
-    [dic enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        
-        NSString *key_Value = [NSString stringWithFormat:@"%@=%@&", key, obj];
-        tempStr = [tempStr stringByAppendingString:key_Value];
-    }];
-    
-    if (dic.allKeys.count) {
-        
-        tempStr = [tempStr substringToIndex:tempStr.length-1];
-    }
-    BLLog(@"\n\n路径--%@", tempStr);
-}
-
-
 
 @end
 

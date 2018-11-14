@@ -48,13 +48,13 @@ static NSString *classGrandDynamicID = @"classGrandDynamicID";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:classGrandDynamicID forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    [tableView preloadDataWithCurrentIndex:indexPath.row totalCount:self.dataArray.count];
+    [tableView bl_PreloadDataWithCurrentIndex:indexPath.row totalCount:self.dataArray.count];
     BLListItem *item = self.dataArray[indexPath.row];
     
-    cell.textLabel.text = item.teacherName;
-    cell.detailTextLabel.text = item.depict;
+    cell.textLabel.text = item.courseName;
+    cell.detailTextLabel.text = item.title;
 
-    [cell.imageView setImageURL:[NSURL URLWithString:@"http://img.51xiaoniu.cn/product/main_assets/assets/5712/0941/206a/af16/68f3/088a/569869fbaf4843084c0007ba.jpg"]];
+//    [cell.imageView setImageURL:[NSURL URLWithString:@"http://img.51xiaoniu.cn/product/main_assets/assets/5712/0941/206a/af16/68f3/088a/569869fbaf4843084c0007ba.jpg"]];
     
     return cell;
 }

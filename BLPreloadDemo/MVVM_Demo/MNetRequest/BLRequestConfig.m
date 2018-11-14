@@ -195,53 +195,24 @@
 
 /*! 与后台约定加密码规则，所有参数进行排序，用|分隔，生成MD5串，以sign=MD5作为一个参数 */
 +(NSMutableDictionary *)parameterExchange:(NSDictionary *)setting url:(NSString *)url{
-    //获取时间戳
-    UInt64 timestamps = [[NSDate date] timeIntervalSince1970]*1000;
     
     NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
-    parameter = setting.mutableCopy;
-    
-    [parameter setValue:@(timestamps) forKey:@"timestamps"];
-    [parameter setValue:PrivateKey forKey:@"privateKey"];
-    
-    NSArray *dicKeysArray = [parameter allKeys];
-    //对 key 进行排序
-    NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch|NSNumericSearch|
-    NSWidthInsensitiveSearch|NSForcedOrderingSearch;
-    
-    NSComparator sort = ^(NSString *obj1,NSString *obj2){
-        
-        NSRange range = NSMakeRange(0,obj1.length);
-        
-        return [obj1 compare:obj2 options:comparisonOptions range:range];
-    };
-    
-    NSArray *resultArray = [dicKeysArray sortedArrayUsingComparator:sort];
-    //拼接sign字符串
-    NSString *signForString = @"";
+    if(setting)
+        parameter = setting.mutableCopy;
+  
     //拼接url参数
-    NSString *urlWithParamterString = [url stringByAppendingString:@"?"];
+   __block NSString *urlWithParamterString = [url stringByAppendingString:@"?"];
     
-    for (NSString *key in resultArray){
+    [parameter enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         
-        NSString *temp = [NSString stringWithFormat:@"%@|%@|", key, [parameter objectForKey:key]];
-        signForString = [signForString stringByAppendingString:temp];
-        
-        NSString *paramer = [NSString stringWithFormat:@"%@=%@&", key, [parameter objectForKey:key]];
+        NSString *paramer = [NSString stringWithFormat:@"%@=%@&", key, obj];
+      
         urlWithParamterString = [urlWithParamterString stringByAppendingString:paramer];
-    }
-    
-    
-    //删除最后一个字符"|"
-    signForString = [signForString substringToIndex:signForString.length - 1];
-    
-    //进行 md5 编码,生成 sign 值
-    NSString *sign = [self md5StringFromString:signForString];
-    [parameter setValue:sign forKey:@"sign"];
-    
-    //将最后一个 sign 值也拼接到字符串中打印
-    urlWithParamterString = [urlWithParamterString stringByAppendingString:[NSString stringWithFormat:@"%@=%@", @"sign", sign]];
+    }];
+
+    urlWithParamterString = [urlWithParamterString substringToIndex:urlWithParamterString.length-1];
+
     BLLog(@"\n\n路径--%@\n\n", urlWithParamterString);
     return parameter;
 }
@@ -314,9 +285,10 @@
 
 // 是否wifi
 + (BOOL)isEnableWIFI{
-    YYReachability *reachable = [[YYReachability alloc] init];
+    AFNetworkReachabilityManager *reachable = [AFNetworkReachabilityManager sharedManager];
+   
     BOOL iswifi = NO;
-    if (reachable.status ==  YYReachabilityStatusWiFi){
+    if (reachable.networkReachabilityStatus ==  AFNetworkReachabilityStatusReachableViaWiFi){
         iswifi = YES;
     }
     return iswifi;
@@ -324,8 +296,9 @@
 
 // 是否3G
 + (BOOL)isEnableWWAN{
-    YYReachability *reachable = [[YYReachability alloc] init];
-    if ( reachable.status == YYReachabilityStatusWWAN)//有网且不是wifi
+   
+    AFNetworkReachabilityManager *reachable = [AFNetworkReachabilityManager sharedManager];
+    if ( reachable.networkReachabilityStatus == AFNetworkReachabilityStatusReachableViaWWAN)//有网且不是wifi
         return YES;
     else
         return NO;
@@ -333,8 +306,9 @@
 
 //网络是否可用
 + (BOOL)isNoNet{
-    YYReachability *reachable = [[YYReachability alloc] init];
-    if (reachable.status == YYReachabilityStatusNone) {
+  
+    AFNetworkReachabilityManager *reachable = [AFNetworkReachabilityManager sharedManager];
+    if (reachable.networkReachabilityStatus == AFNetworkReachabilityStatusNotReachable) {
         return YES;
     }
     else

@@ -10,7 +10,7 @@
 
 @class BLRequestConfig;
 
-@interface UIScrollView (BLPreload)
+@interface NSObject (BLPreload)
 
 
 /**  *  当前页码 */
@@ -22,6 +22,9 @@
 
 /** *  模型数组 */
 @property (nonatomic, strong) NSMutableArray *model_blArray;
+
+/*! 未经处理的源数据 */
+@property (nonatomic, strong) id orgin_Object;
 
 
 

@@ -8,13 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^BLSuccessBlock)(UIButton *paramer);
+typedef void(^BLCustomerBlock)(UIButton *paramer);
+
 @interface BLCustomerViewIfNoData : UIView
 
 
 + (instancetype) showView:(CGRect)frame;
 
-@property (copy, nonatomic) BLSuccessBlock reloadDataBlock;
+@property (copy, nonatomic) BLCustomerBlock reloadDataBlock;
 
 @property (copy, nonatomic) NSString *secondTitle;
 

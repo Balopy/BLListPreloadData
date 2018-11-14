@@ -29,6 +29,7 @@
         
         if (config.isRefreshing) {//如果刷新，置1
             self.currentblPage = 1;
+            self.noRefreshData = NO;
         }
         [paramer setValue:@(self.currentblPage) forKey:config.keyOfPage];
         self.currentblPage ++;//加1，回到第一页
@@ -41,8 +42,8 @@
     //请求数据
     [BLNetRequestModel request:config success:^(id responseData) {
         
-        config.orginObject = responseData;//源数据，后面需要针对模型进行处理
-        
+        self.orgin_Object = responseData;//源数据，后面需要针对模型进行处理
+ 
         if (!self.model_blArray) {
             self.model_blArray = @[].mutableCopy;
         }
@@ -152,5 +153,13 @@
     objc_setAssociatedObject(self, @selector(model_blArray), model_blArray, OBJC_ASSOCIATION_RETAIN);
 }
 
+
+- (id)orgin_Object {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
+- (void)setOrgin_Object:(id)orgin_Object {
+    objc_setAssociatedObject(self, @selector(orgin_Object), orgin_Object, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 @end

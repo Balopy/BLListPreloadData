@@ -12,9 +12,6 @@
 
 @interface BLNetRequestModel : NSObject
 
-/** 1 * post 请求 无进度 */
-+ (void)httpRequest:(BLRequestConfig *)config success:(void (^)(id responseData))success failure:(void (^)(NSError *error))failure;
-
 
 /** 2 * post 请求 无进度 */
 + (void)request:(BLRequestConfig *)config success:(void (^)(id responseData))success failure:(void (^)(NSError *error))failure;

@@ -66,7 +66,7 @@ static NSString *levelIdentifier = @"levelBtnCollectionViewCell";
     
     BLListItem *model = self.sourceData[indexPath.row];
     
-    cell.itemLabel.text = model.teacherName;
+    cell.itemLabel.text = model.courseName;
     
     return cell;
 }

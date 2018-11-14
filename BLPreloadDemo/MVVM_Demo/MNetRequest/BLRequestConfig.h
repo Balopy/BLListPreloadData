@@ -28,7 +28,7 @@
 /** *是否将 model 做二级处理, 很重要，必须要分清楚 */
 @property (nonatomic, assign)  BOOL dealSecond;
 
-/** *  原始请求数据，未经处理的 */
+/** *  原始请求数据，未经处理的，比如上传图片时的图片数组，请求回调的entity等 */
 @property (nonatomic, strong) id orginObject;
 
 
@@ -37,7 +37,7 @@
 /** * 是否刷新 */
 @property (nonatomic, assign) BOOL isRefreshing;
 
-/*! 缓存时间 */
+/*! 缓存时间, 单位分 */
 @property (nonatomic, assign) NSTimeInterval cashTime;
 /*! 是否缓存 */
 @property (nonatomic, assign) BOOL cashSeting;
